@@ -70,7 +70,7 @@ def char_detect(img_path, dictionary):
             # char_confs = ocr_api.AllWordConfidences()
 
             chars = re.split('(\W+)\*', chars)[0].split(' ')
-            chars = [i.strip('\n') for i in chars]
+            chars = [i.replace('\n', ' ').strip(' ') for i in chars]
 
             clean_tokens = [i for i in chars
                             if len(i) > 0 and
