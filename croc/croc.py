@@ -66,11 +66,14 @@ def char_detect(img_path, dictionary):
             sharp_image = img.filter(ImageFilter.SHARPEN)
 
             ocr_api.SetImage(sharp_image)
-            chars = ocr_api.GetUTF8Text()
+            raw_chars = ocr_api.GetUTF8Text()
             # char_confs = ocr_api.AllWordConfidences()
 
-            chars = re.split('(\W+)\*', chars)[0].split(' ')
-            chars = [i.replace('\n', ' ').strip(' ') for i in chars]
+            raw_chars = re.split('(\W+)\*', raw_chars)[0].split(' ')
+            raw_chars = [i.replace('\n', ' ') for i in raw_chars]
+            chars = []
+            for i in raw_chars:
+                chars.extend(i.split(' '))
 
             clean_tokens = [i for i in chars
                             if len(i) > 0 and
