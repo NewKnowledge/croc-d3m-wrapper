@@ -11,6 +11,15 @@ import numpy as np
 import pandas as pd
 from keras.preprocessing import image
 
+from primitive_interfaces.base import PrimitiveBase, CallResult
+from d3m_metadata import container, hyperparams, metadata as metadata_module, params, utils
+
+__author__ = 'Distil'
+__version__ = '1.0.0'
+
+Inputs = container.List[str]
+Outputs = container.List[container.List[str]]
+
 
 def load_image(img_path, target_size, prep_func=lambda x: x):
     ''' load image given path and convert to an array
