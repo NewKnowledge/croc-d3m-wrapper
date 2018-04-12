@@ -101,18 +101,21 @@ def croc(image_path, dictionary=spacy.load('en'), target_size=(299, 299)):
     model = InceptionV3(weights='imagenet')
 
     if validate_url(image_path):
+        filename = 'target_img.jpg'
         load_image_from_web(image_path)
+    else:
+        filename = image_path
 
     print('preprocessing image')
     X = np.array(
         [load_image(
-            'target_img.jpg', target_size, prep_func=preprocess_input)])
+            filename, target_size, prep_func=preprocess_input)])
 
     print('making object predictions')
     object_predictions = classify_objects(X, model, decode_predictions)
 
     print('performing character recognition')
-    char_predictions = char_detect('target_img.jpg', dictionary)
+    char_predictions = char_detect(filename, dictionary)
 
     # save output
     object_predictions = pd.DataFrame.from_records(
@@ -120,6 +123,7 @@ def croc(image_path, dictionary=spacy.load('en'), target_size=(299, 299)):
     words = pd.Series(char_predictions['tokens'])
     text = pd.Series(char_predictions['text'])
 
-    os.remove('target_img.jpg')
+    if filename == 'starget_img.jpg':
+        os.remove('target_img.jpg')
 
     return dict(objects=object_predictions, chars=char_predictions)
