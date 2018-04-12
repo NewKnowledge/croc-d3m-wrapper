@@ -5,7 +5,6 @@ sklearn
 pandas 
 Pillow 
 keras 
-azure-datalake-store 
-flask 
 tesserocr 
 requests 
+spacy

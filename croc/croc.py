@@ -2,9 +2,9 @@ import io
 import os
 import time
 import re
-import requests
 from PIL import Image, ImageFilter
 
+import requests
 import spacy
 from tesserocr import PyTessBaseAPI
 import numpy as np
@@ -44,7 +44,7 @@ def validate_url(url):
     return bool(url_validator.match(url))
 
 
-def classify_objects(images_array, model, decode_func, n_top_preds=10):
+def classify_objects(images_array, model, decode_func, n_top_preds):
     ''' Returns binary array with ones where the model predicts that
         the image contains an instance of one of the target classes
         (specified by wordnet id)
@@ -93,7 +93,8 @@ def char_detect(img_path, dictionary):
             return dict(tokens=clean_tokens, text=clean_chars)
 
 
-def croc(image_path, dictionary=spacy.load('en'), target_size=(299, 299)):
+def croc(image_path, dictionary=spacy.load('en'), target_size=(299, 299),
+         n_top_preds=10):
 
     print('loading model')
     from keras.applications.inception_v3 \
@@ -112,7 +113,8 @@ def croc(image_path, dictionary=spacy.load('en'), target_size=(299, 299)):
             filename, target_size, prep_func=preprocess_input)])
 
     print('making object predictions')
-    object_predictions = classify_objects(X, model, decode_predictions)
+    object_predictions = classify_objects(X, model, decode_predictions,
+                                          n_top_preds)
 
     print('performing character recognition')
     char_predictions = char_detect(filename, dictionary)
