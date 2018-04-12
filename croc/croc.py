@@ -69,15 +69,25 @@ def char_detect(img_path, dictionary):
             raw_chars = ocr_api.GetUTF8Text()
             # char_confs = ocr_api.AllWordConfidences()
 
+            # nasty regex to fix up the tesseract output
+            # # whitespace between punctuation/symbols
+            raw_chars = re.sub(
+                r"([\w/'+$\s-]+|[^\w/'+$\s-]+)\s*", r"\1 ", raw_chars)
+            # # split on whitespace
             raw_chars = re.split('(\W+)\*', raw_chars)[0].split(' ')
+            # # replace persistent newlines
             raw_chars = [i.replace('\n', ' ') for i in raw_chars]
             chars = []
-            for i in raw_chars:
-                chars.extend(i.split(' '))
 
-            clean_tokens = [i for i in chars
-                            if len(i) > 0 and
-                            i in dictionary.vocab]
+            for i in raw_chars:
+                if i not in ['']:
+                    chars.extend(i.split(' '))
+
+            # tokenize text output
+            clean_tokens = list(set([i.lower() for i in chars
+                                    if len(i) > 0 and
+                                    i in dictionary.vocab]))
+            # utf encode the clean raw output
             clean_chars = [i.encode('utf-8') for i in chars]
 
             return dict(tokens=clean_tokens, text=clean_chars)
@@ -93,7 +103,7 @@ def croc(image_path, dictionary=spacy.load('en'), target_size=(299, 299)):
     if validate_url(image_path):
         load_image_from_web(image_path)
 
-    print('preprocessing images')
+    print('preprocessing image')
     X = np.array(
         [load_image(
             'target_img.jpg', target_size, prep_func=preprocess_input)])
