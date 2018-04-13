@@ -13,11 +13,11 @@ setup(name='croc',
                         'requests >= 2.18.4',
                         'numpy >= 1.13.3'],
       dependency_links=[
-            "git+https://github.com/NewKnowledge/croc-d3m-wrapper"
-      ],
+                       "git+https://github.com/NewKnowledge/croc-d3m-wrapper"
+                       ],
       entry_points={
         'd3m.primitives': [
-            'distil.croc = CROCd3mWrapper:croc'
-        ],
-      },
+                          'distil.croc = CROCd3mWrapper:croc'
+                          ],
+                   },
       )

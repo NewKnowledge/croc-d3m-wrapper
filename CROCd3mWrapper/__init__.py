@@ -1,4 +1,4 @@
-from CROCd3mWrapper.wrapper import *
+from CROCd3mWrapper.wrapper import croc
 
 __version__ = '1.0.0'
 
