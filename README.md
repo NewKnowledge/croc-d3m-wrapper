@@ -10,7 +10,7 @@ pip3 install git+https://github.com/NewKnowledge/croc-d3m-wrapper
 
 `croc()` takes an image path---either a local path or a URL.
 
-## OUTPUT
+## Output
 
 `croc()` returns a dict with the keys `objects` and `chars`. 
 - `objects` is a pandas dataframe with columns `id`, `label` and `confidence`
