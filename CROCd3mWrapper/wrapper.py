@@ -159,7 +159,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         words = pd.Series(char_predictions['tokens'])
         text = pd.Series(char_predictions['text'])
 
-        if filename == 'starget_img.jpg':
+        if filename == 'target_img.jpg':
             os.remove('target_img.jpg')
 
         return dict(objects=object_predictions, chars=char_predictions)
