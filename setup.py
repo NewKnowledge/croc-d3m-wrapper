@@ -1,4 +1,3 @@
-from distutils.core import setup
 
 setup(name='croc',
       version='1.0.0',

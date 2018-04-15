@@ -44,7 +44,7 @@ def validate_url(url):
     return bool(url_validator.match(url))
 
 
-def classify_objects(images_array, model, decode_func, n_top_preds):
+def classify_objects(image_array, model, decode_func, n_top_preds):
     ''' Returns binary array with ones where the model predicts that
         the image contains an instance of one of the target classes
         (specified by wordnet id)
@@ -86,7 +86,7 @@ def char_detect(img_path, dictionary):
             # tokenize text output
             clean_tokens = list(set([i.lower() for i in chars
                                     if len(i) > 0 and
-                                    i in dictionary.vocab]))
+                                    i.lower() in dictionary.vocab]))
             # utf encode the clean raw output
             clean_chars = [i.encode('utf-8') for i in chars]
 
@@ -119,13 +119,7 @@ def croc(image_path, dictionary=spacy.load('en'), target_size=(299, 299),
     print('performing character recognition')
     char_predictions = char_detect(filename, dictionary)
 
-    # save output
-    object_predictions = pd.DataFrame.from_records(
-        object_predictions[0], columns=['id', 'label', 'confidence'])
-    words = pd.Series(char_predictions['tokens'])
-    text = pd.Series(char_predictions['text'])
-
-    if filename == 'starget_img.jpg':
+    if filename == 'target_img.jpg':
         os.remove('target_img.jpg')
 
     return dict(objects=object_predictions, chars=char_predictions)
