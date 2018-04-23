@@ -6,13 +6,17 @@ from PIL import Image, ImageFilter
 
 import requests
 import spacy
+from json import dumps
 from tesserocr import PyTessBaseAPI
 import numpy as np
 import pandas as pd
 from keras.preprocessing import image
+from keras.applications.inception_v3 \
+    import decode_predictions, preprocess_input
 
 from primitive_interfaces.base import PrimitiveBase, CallResult
-from d3m_metadata import container, hyperparams, metadata as metadata_module, params, utils
+from d3m_metadata import container, hyperparams, metadata as \
+    metadata_module, params, utils
 
 __author__ = 'Distil'
 __version__ = '1.0.0'
@@ -28,14 +32,55 @@ class Params(params.Params):
 class Hyperparams(hyperparams.Hyperparams):
     pass
 
-class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
+
+class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     metadata = {}
 
-    def __init__(self, *, hyperparams: Hyperparams, ):
+    def __init__(self, *, hyperparams: Hyperparams)-> None:
+        super().__init__(hyperparams=Hyperparams)
+
+        self.target_size = (299, 299)
+        self.model = InceptionV3(weights='imagenet')
+        self.nlp = spacy.load('en')
+        self.n_top_preds = 10
+
+    def predict(image_path, self.model, self.nlp,
+                self.target_size, self.n_top_preds):
+        try:
+            if validate_url(image_path):
+                filename = 'target_img.jpg'
+                load_image_from_web(image_path)
+            else:
+                filename = image_path
+
+            print('preprocessing image')
+            X = np.array(
+                [load_image(
+                    filename, target_size, prep_func=preprocess_input)])
+
+            print('making object predictions')
+            object_predictions = classify_objects(X, model, decode_predictions,
+                                                  n_top_preds)
+
+            object_predictions = pd.DataFrame.from_records(
+                object_predictions[0], columns=['id', 'label', 'confidence'])
+
+            print('performing character recognition')
+            char_predictions = char_detect(filename, nlp)
+
+            if filename == 'target_img.jpg':
+                os.remove('target_img.jpg')
+
+            return dumps(dict(
+                objects=result['objects'].to_dict(),
+                text=[str(i) for i in result['chars']['text']],
+                tokens=result['chars']['tokens']))
+        except:
+            return "Something went wrong when generating CROC predictions"
 
     def fit(self) -> None:
         pass
-    
+
     def get_params(self) -> Params:
         return self._params
 
@@ -45,14 +90,12 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
         pass
 
-
     def load_image(img_path, target_size, prep_func=lambda x: x):
         ''' load image given path and convert to an array
         '''
         img = image.load_img(img_path, target_size=target_size)
         x = image.img_to_array(img)
         return prep_func(x)
-
 
     def load_image_from_web(image_url):
         ''' load an image from a provided hyperlink
@@ -65,7 +108,6 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
                 img = img.convert('RGB')
             img.save('target_img.jpg')
 
-
     def validate_url(url):
         url_validator = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
@@ -77,8 +119,20 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
         return bool(url_validator.match(url))
 
+    def cleanup_text(raw_chars, nlp, logging=False):
+        ''' use spacy to clean text and find tokens
+        '''
+        doc = nlp(raw_chars, disable=['parser', 'ner'])
+        text = [t.text for t in doc]
+        tokens = [tok.lemma_.lower().strip() for tok in doc
+                  if tok.lemma_ != '-PRON-']
+        tokens = [tok for tok in tokens
+                  if tok not in nlp.Defaults.stop_words and
+                  tok not in string.punctuation]
 
-    def classify_objects(images_array, model, decode_func, n_top_preds):
+        return dict(tokens=list(set(tokens)), text=text)
+
+    def classify_objects(image_array, model, decode_func, n_top_preds):
         ''' Returns binary array with ones where the model predicts that
             the image contains an instance of one of the target classes
             (specified by wordnet id)
@@ -88,78 +142,23 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         predictions = decode_func(predictions, top=n_top_preds)
         return predictions
 
-
-    def char_detect(img_path, dictionary):
-        """ Run tesseract ocr on an image supplied
+    def char_detect(img_path, nlp):
+        ''' Run tesseract ocr on an image supplied
             as an image path.
-        """
+        '''
         with PyTessBaseAPI() as ocr_api:
-            with Image.open(img_path) as img:
+            with Image.open(img_path) as image:
                 # will need a better preprocessing approach here
                 # if we stay with tesseract:
-                sharp_image = img.filter(ImageFilter.SHARPEN)
+                sharp_image = image.filter(ImageFilter.SHARPEN)
 
                 ocr_api.SetImage(sharp_image)
                 raw_chars = ocr_api.GetUTF8Text()
                 # char_confs = ocr_api.AllWordConfidences()
 
-                # nasty regex to fix up the tesseract output
-                # # whitespace between punctuation/symbols
-                raw_chars = re.sub(
-                    r"([\w/'+$\s-]+|[^\w/'+$\s-]+)\s*", r"\1 ", raw_chars)
-                # # split on whitespace
-                raw_chars = re.split('(\W+)\*', raw_chars)[0].split(' ')
-                # # replace persistent newlines
-                raw_chars = [i.replace('\n', ' ') for i in raw_chars]
-                chars = []
+                text = cleanup_text(raw_chars, nlp)
 
-                for i in raw_chars:
-                    if i not in ['']:
-                        chars.extend(i.split(' '))
-
-                # tokenize text output
-                clean_tokens = list(set([i.lower() for i in chars
-                                        if len(i) > 0 and
-                                        i in dictionary.vocab]))
                 # utf encode the clean raw output
-                clean_chars = [i.encode('utf-8') for i in chars]
+                clean_chars = [i.encode('utf-8') for i in text['text']]
 
-                return dict(tokens=clean_tokens, text=clean_chars)
-
-
-    def croc(image_path, dictionary=spacy.load('en'), target_size=(299, 299),
-             n_top_preds=10):
-
-        print('loading model')
-        from keras.applications.inception_v3 \
-            import (InceptionV3, decode_predictions, preprocess_input)
-        model = InceptionV3(weights='imagenet')
-
-        if validate_url(image_path):
-            filename = 'target_img.jpg'
-            load_image_from_web(image_path)
-        else:
-            filename = image_path
-
-        print('preprocessing image')
-        X = np.array(
-            [load_image(
-                filename, target_size, prep_func=preprocess_input)])
-
-        print('making object predictions')
-        object_predictions = classify_objects(X, model, decode_predictions,
-                                              n_top_preds)
-
-        print('performing character recognition')
-        char_predictions = char_detect(filename, dictionary)
-
-        # save output
-        object_predictions = pd.DataFrame.from_records(
-            object_predictions[0], columns=['id', 'label', 'confidence'])
-        words = pd.Series(char_predictions['tokens'])
-        text = pd.Series(char_predictions['text'])
-
-        if filename == 'target_img.jpg':
-            os.remove('target_img.jpg')
-
-        return dict(objects=object_predictions, chars=char_predictions)
+                return dict(tokens=text['tokens'], text=clean_chars)
