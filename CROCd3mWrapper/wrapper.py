@@ -44,16 +44,34 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self.nlp = spacy.load('en')
         self.n_top_preds = 10
 
-    def predict(image_path, model=self.model,
+    def predict(image_path=inputs, model=self.model,
                 nlp=self.nlp,
                 target_size=self.target_size,
                 n_top_preds=self.n_top_preds):
+        """
+            Produce image object classification predictions and OCR for an
+            image provided as an URI or filepath
+
+        Parameters
+        ----------
+        inputs : Image URI or filepath
+
+        Returns
+        -------
+        output : A dict with objects, text and tokens, corresponding to the
+            detected objects, raw text and tokens predicted to bne in the 
+            supplied image.
+        """
+
         try:
-            if validate_url(image_path):
-                filename = 'target_img.jpg'
-                load_image_from_web(image_path)
-            else:
-                filename = image_path
+            try:
+                if validate_url(image_path):
+                    filename = 'target_img.jpg'
+                    load_image_from_web(image_path)
+                else:
+                    filename = image_path
+             except:
+                return "Image loading failed"
 
             print('preprocessing image')
             X = np.array(

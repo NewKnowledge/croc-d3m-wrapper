@@ -1,4 +1,22 @@
+import os
 from distutils.core import setup
+from setuptools.command.develop import develop
+from setuptools.command.install import install
+
+
+class PostDevelopCommand(develop):
+    """Post-installation for development mode."""
+    def run(self):
+        os.system("python3 -m spacy download en")
+        develop.run(self)
+
+
+class PostInstallCommand(install):
+    """Post-installation for installation mode."""
+    def run(self):
+        os.system("python3 -m spacy download en")
+        install.run(self)
+
 
 setup(name='CROCd3mWrapper',
       version='1.0.0',
@@ -17,8 +35,12 @@ setup(name='CROCd3mWrapper',
                        "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git#d3m"
                        ],
       entry_points={
-        'd3m.primitives': [
+        'd3m.   primitives': [
                           'distil.croc = CROCd3mWrapper:croc'
                           ],
                    },
+      cmdclass={
+        'develop': PostDevelopCommand,
+        'install': PostInstallCommand,
+               },
       )
