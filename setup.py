@@ -11,9 +11,10 @@ setup(name='CROCd3mWrapper',
                         'tesserocr >= 2.2.2',
                         'spacy >= 2.0.9'
                         'requests >= 2.18.4',
-                        'numpy >= 1.13.3'],
+                        'numpy >= 1.13.3',
+                        'Pillow >= 5.1.0'],
       dependency_links=[
-                       "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git"
+                       "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git#d3m"
                        ],
       entry_points={
         'd3m.primitives': [
