@@ -14,9 +14,10 @@ from keras.preprocessing import image
 from keras.applications.inception_v3 \
     import decode_predictions, preprocess_input
 
-from primitive_interfaces.base import PrimitiveBase, CallResult
-from d3m_metadata import container, hyperparams, metadata as \
-    metadata_module, params, utils
+from d3m import container, utils
+from d3m.primitive_interfaces.base import PrimitiveBase, CallResult
+from d3m.metadata import hyperparams, base as \
+    as metadata_base, params
 
 __author__ = 'Distil'
 __version__ = '1.0.0'
