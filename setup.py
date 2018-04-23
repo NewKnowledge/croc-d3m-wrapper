@@ -36,7 +36,7 @@ setup(name='CROCd3mWrapper',
                        ],
       entry_points={
         'd3m.primitives': [
-                          'distil.croc = CROCd3mWrapper:croc'
+                          'distil.Croc = CROCd3mWrapper:Croc'
                           ],
                    },
       cmdclass={
