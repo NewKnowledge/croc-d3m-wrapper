@@ -186,3 +186,9 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
                 return dict(tokens=text['tokens'], text=clean_chars)
 
+
+if __name__ == '__main__':
+    client = Croc(hyperparams={})
+    image_path = 'http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg'
+    result = client.predict(inputs = image_path)
+    print(result)
