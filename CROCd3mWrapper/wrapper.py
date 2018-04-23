@@ -185,3 +185,4 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
                 clean_chars = [i.encode('utf-8') for i in text['text']]
 
                 return dict(tokens=text['tokens'], text=clean_chars)
+
