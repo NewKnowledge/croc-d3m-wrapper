@@ -44,8 +44,10 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self.nlp = spacy.load('en')
         self.n_top_preds = 10
 
-    def predict(image_path, self.model, self.nlp,
-                self.target_size, self.n_top_preds):
+    def predict(image_path, model=self.model,
+                nlp=self.nlp,
+                target_size=self.target_size,
+                n_top_preds=self.n_top_preds):
         try:
             if validate_url(image_path):
                 filename = 'target_img.jpg'
