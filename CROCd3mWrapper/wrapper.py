@@ -70,7 +70,7 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
                     load_image_from_web(image_path)
                 else:
                     filename = image_path
-             except:
+            except:
                 return "Image loading failed"
 
             print('preprocessing image')
