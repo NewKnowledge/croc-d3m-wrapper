@@ -35,7 +35,7 @@ setup(name='CROCd3mWrapper',
                        "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git#d3m"
                        ],
       entry_points={
-        'd3m.   primitives': [
+        'd3m.primitives': [
                           'distil.croc = CROCd3mWrapper:croc'
                           ],
                    },
