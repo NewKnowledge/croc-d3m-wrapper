@@ -16,7 +16,7 @@ from keras.applications.inception_v3 \
 
 from d3m import container, utils
 from d3m.primitive_interfaces.base import PrimitiveBase, CallResult
-from d3m.metadata import hyperparams, base as \
+from d3m.metadata import hyperparams, base \
     as metadata_base, params
 
 __author__ = 'Distil'
@@ -65,15 +65,15 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         """
 
         try:
-            try:
-                if validate_url(image_path):
-                    filename = 'target_img.jpg'
-                    load_image_from_web(image_path)
-                else:
-                    filename = image_path
-            except:
-                return "Image loading failed"
+            if validate_url(image_path):
+                filename = 'target_img.jpg'
+                load_image_from_web(image_path)
+            else:
+                filename = image_path
+        except:
+            return "Image loading failed."
 
+        try:
             print('preprocessing image')
             X = np.array(
                 [load_image(
@@ -97,7 +97,7 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
                 text=[str(i) for i in result['chars']['text']],
                 tokens=result['chars']['tokens']))
         except:
-            return "Something went wrong when generating CROC predictions"
+            return "Something went wrong when generating CROC predictions."
 
     def fit(self) -> None:
         pass
