@@ -1,9 +1,9 @@
 from distutils.core import setup
 
-setup(name='croc',
+setup(name='CROCd3mWrapper',
       version='1.0.0',
       description='Character recognition and object classification system.',
-      packages=['croc'],
+      packages=['CROCd3mWrapper'],
       install_requires=['Keras >= 2.0.2',
                         'scikit-learn >= 0.18.1',
                         'pandas >= 0.19.2',
@@ -13,7 +13,7 @@ setup(name='croc',
                         'requests >= 2.18.4',
                         'numpy >= 1.13.3'],
       dependency_links=[
-                       "git+https://github.com/NewKnowledge/croc-d3m-wrapper"
+                       "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git"
                        ],
       entry_points={
         'd3m.primitives': [
