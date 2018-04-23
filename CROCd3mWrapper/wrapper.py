@@ -45,10 +45,10 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self.nlp = spacy.load('en')
         self.n_top_preds = 10
 
-    def predict(image_path=inputs, model=self.model,
+    def predict(self, *, inputs: Inputs, model=self.model,
                 nlp=self.nlp,
                 target_size=self.target_size,
-                n_top_preds=self.n_top_preds):
+                n_top_preds=self.n_top_preds) -> CallResult[Outputs]:
         """
             Produce image object classification predictions and OCR for an
             image provided as an URI or filepath
@@ -63,6 +63,8 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             detected objects, raw text and tokens predicted to bne in the 
             supplied image.
         """
+
+        image_path = inputs
 
         try:
             if validate_url(image_path):
