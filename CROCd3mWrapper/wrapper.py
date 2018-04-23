@@ -45,10 +45,7 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self.nlp = spacy.load('en')
         self.n_top_preds = 10
 
-    def predict(self, *, inputs: Inputs, model=self.model,
-                nlp=self.nlp,
-                target_size=self.target_size,
-                n_top_preds=self.n_top_preds) -> CallResult[Outputs]:
+    def predict(self, *, inputs: Inputs) -> CallResult[Outputs]:
         """
             Produce image object classification predictions and OCR for an
             image provided as an URI or filepath
@@ -63,7 +60,7 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             detected objects, raw text and tokens predicted to bne in the 
             supplied image.
         """
-
+        
         image_path = inputs
 
         try:
@@ -79,17 +76,18 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             print('preprocessing image')
             X = np.array(
                 [load_image(
-                    filename, target_size, prep_func=preprocess_input)])
+                    filename, self.target_size, prep_func=preprocess_input)])
 
             print('making object predictions')
-            object_predictions = classify_objects(X, model, decode_predictions,
-                                                  n_top_preds)
+            object_predictions = classify_objects(X, self.model,
+                                                  decode_predictions,
+                                                  self.n_top_preds)
 
             object_predictions = pd.DataFrame.from_records(
                 object_predictions[0], columns=['id', 'label', 'confidence'])
 
             print('performing character recognition')
-            char_predictions = char_detect(filename, nlp)
+            char_predictions = char_detect(filename, self.nlp)
 
             if filename == 'target_img.jpg':
                 os.remove('target_img.jpg')
