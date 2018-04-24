@@ -35,7 +35,10 @@ class Hyperparams(hyperparams.Hyperparams):
 
 
 class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
-    metadata = metadata_base.PrimitiveMetadata({})
+    metadata = metadata_base.PrimitiveMetadata({
+        # The same path the primitive is registered with entry points in setup.py.
+        'python_path': 'd3m.primitives.distil.simon',
+        })
 
     def __init__(self, *, hyperparams: Hyperparams)-> None:
         super().__init__(hyperparams=Hyperparams)
