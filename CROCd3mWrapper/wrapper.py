@@ -35,7 +35,6 @@ class Hyperparams(hyperparams.Hyperparams):
 
 
 class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
-    metadata = {}
 
     def __init__(self, *, hyperparams: Hyperparams)-> None:
         super().__init__(hyperparams=Hyperparams)
