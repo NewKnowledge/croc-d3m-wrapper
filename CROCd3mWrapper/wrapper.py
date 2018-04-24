@@ -60,7 +60,7 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             detected objects, raw text and tokens predicted to bne in the 
             supplied image.
         """
-        
+
         image_path = inputs
 
         try:
@@ -93,9 +93,9 @@ class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
                 os.remove('target_img.jpg')
 
             return dumps(dict(
-                objects=result['objects'].to_dict(),
-                text=[str(i) for i in result['chars']['text']],
-                tokens=result['chars']['tokens']))
+                objects=object_predictions.to_dict(),
+                text=[str(i) for i in char_predictions['text']],
+                tokens=char_predictions['tokens']))
         except:
             return "Something went wrong when generating CROC predictions."
 
