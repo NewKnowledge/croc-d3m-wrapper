@@ -14,10 +14,10 @@ from keras.preprocessing import image
 from keras.applications.inception_v3 \
     import decode_predictions, preprocess_input
 
-from d3m import container, utils
 from d3m.primitive_interfaces.base import PrimitiveBase, CallResult
-from d3m.metadata import hyperparams, base \
-    as metadata_base, params
+
+from d3m import container, utils
+from d3m.metadata import hyperparams, base as metadata_base, params
 
 __author__ = 'Distil'
 __version__ = '1.0.0'
@@ -35,7 +35,7 @@ class Hyperparams(hyperparams.Hyperparams):
 
 
 class Croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
-    # metadate = metadata_base.PrimitiveMetadata({})
+    metadata = metadata_base.PrimitiveMetadata({})
 
     def __init__(self, *, hyperparams: Hyperparams)-> None:
         super().__init__(hyperparams=Hyperparams)
