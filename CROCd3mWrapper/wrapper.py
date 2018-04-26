@@ -43,30 +43,31 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # Of course Python packages can also have their own dependencies, but sometimes it is necessary to
         # install a Python package first to be even able to run setup.py of another package. Or you have
         # a dependency which is not on PyPi.
-        "installation": [{
-                "type": "UBUNTU",
-                "package": "tesseract-ocr"
-            },
-
-            {
-                "type": "UBUNTU",
-                "package": "libtesseract-dev"
-            },
-
-            {
-                "type": "UBUNTU",
-                "package": "libleptonica-dev"
-            },
-
-            {
-                "type": "PIP",
-                "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@9dfe0b3af0e09be511d57cb217b840dc62aa7ee7#egg=nk_croc"
-            },
-
-            {
-                "type": "PIP",
-                "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@37de61749181e8b522b697ec011febe61218586c#egg=CROCd3mWrapper"
-            }],
+        "installation": [
+              {
+                  "type": "UBUNTU",
+                  "package": "tesseract-ocr",
+                  "version": "3.04.01-6"
+              },
+              {
+                  "type": "UBUNTU",
+                  "package": "libtesseract-dev",
+                  "version": "3.04.01-6"
+              },
+              {
+                  "type": "UBUNTU",
+                  "package": "libleptonica-dev",
+                  "version": "1.74.4-1"
+              },
+              {
+                  "type": "PIP",
+                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@9dfe0b3af0e09be511d57cb217b840dc62aa7ee7#egg=nk_croc"
+              },
+              {
+                  "type": "PIP",
+                  "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@4cc350e186db788926c7630373072654cb0aa474#egg=CROCd3mWrapper"
+              }
+        ],
         # The same path the primitive is registered with entry points in setup.py.
         'python_path': 'd3m.primitives.distil.croc',
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
