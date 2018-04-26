@@ -67,8 +67,6 @@ RUN pip3 --no-cache-dir install \
 
 RUN python3 -m spacy download en
 
-COPY . /croc/
-
 # For CUDA profiling, TensorFlow requires CUPTI.
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 
@@ -81,8 +79,3 @@ ENV LC_ALL=C.UTF-8 \
 
 RUN echo $LC_ALL &&\
     echo $LANG
-
-RUN chmod +x start_flask.sh &&\     
-    sync
-
-CMD ./start_flask.sh
