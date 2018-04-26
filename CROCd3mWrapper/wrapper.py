@@ -72,8 +72,10 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         'python_path': 'd3m.primitives.distil.croc',
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
         # best describe the primitive, make a merge request.
-        "algorithm_types": [metadata_base.PrimitiveAlgorithmType.MULTILABEL_CLASSIFICATION],
-        "primitive_family": [metadata_base.PrimitiveFamily.DIGITAL_IMAGE_PROCESSING]
+        "algorithm_types": [
+            metadata_base.PrimitiveAlgorithmType.MULTILABEL_CLASSIFICATION
+            ],
+        "primitive_family": metadata_base.PrimitiveFamily.DIGITAL_IMAGE_PROCESSING
     })
 
     def __init__(self, *, hyperparams: Hyperparams)-> None:
