@@ -73,7 +73,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
         # best describe the primitive, make a merge request.
         "algorithm_types": ["MULTILABEL_CLASSIFICATION"],
-        "primitive_family": ["DIGITAL_IMAGE_PROCESSING"],
+        "primitive_family": ["DIGITAL_IMAGE_PROCESSING"]
     })
 
     def __init__(self, *, hyperparams: Hyperparams)-> None:
