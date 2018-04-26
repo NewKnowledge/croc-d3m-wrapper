@@ -3,8 +3,9 @@ from distutils.core import setup
 
 setup(name='CROCd3mWrapper',
       version='1.0.0',
-      description='Character recognition and object classification system.',
+      description='character recognition and object classification primitive.',
       packages=['CROCd3mWrapper'],
+      keywords=['d3m_primitive'],
       install_requires=['pandas >= 0.19.2',
                         'numpy >= 1.13.3',
                         'Pillow >= 5.1.0',
