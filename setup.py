@@ -14,7 +14,7 @@ setup(name='CROCd3mWrapper',
                        ],
       entry_points={
         'd3m.primitives': [
-                          'distil.croc = CROCd3mWrapper:Croc'
+                          'distil.croc = CROCd3mWrapper:croc'
                           ],
                    }
       )
