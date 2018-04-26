@@ -31,8 +31,8 @@ class Hyperparams(hyperparams.Hyperparams):
 
 class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     metadata = metadata_base.PrimitiveMetadata({
-        # # Simply an UUID generated once and fixed forever. Generated using "uuid.uuid4()".
-        # 'id': "d2fa8df2-6517-3c26-bafc-87b701c4043a",
+        # Simply an UUID generated once and fixed forever. Generated using "uuid.uuid4()".
+        'id': "404fae2a-2f0a-4c9b-9ad2-fb1528990561",
         'version': __version__,
         'name': "croc",
         # Keywords do not have a controlled vocabulary. Authors can put here whatever they find suitable.
