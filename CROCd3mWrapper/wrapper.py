@@ -43,8 +43,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # Of course Python packages can also have their own dependencies, but sometimes it is necessary to
         # install a Python package first to be even able to run setup.py of another package. Or you have
         # a dependency which is not on PyPi.
-        "installation": [
-            {
+        "installation": [{
                 "type": "UBUNTU",
                 "package": "tesseract-ocr"
             },
@@ -66,9 +65,8 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
             {
                 "type": "PIP",
-                "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@24fe87edc718bcc04b86b5213d88d316c2062fba#egg=CROCd3mWrapper"
-            }
-        ],
+                "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@37de61749181e8b522b697ec011febe61218586c#egg=CROCd3mWrapper"
+            }],
         # The same path the primitive is registered with entry points in setup.py.
         'python_path': 'd3m.primitives.distil.croc',
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
