@@ -49,7 +49,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # install a Python package first to be even able to run setup.py of another package. Or you have
         # a dependency which is not on PyPi.
         'installation': [{
-            'type': metadata_basePrimitiveInstallationType.PIP,
+            'type': metadata_base.PrimitiveInstallationType.PIP,
             'package_uri': 'git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#egg=CROCd3mWrapper'.format(
                 git_commit="60bf5890a893df0363854c52b02092af13af4373",
             ),
