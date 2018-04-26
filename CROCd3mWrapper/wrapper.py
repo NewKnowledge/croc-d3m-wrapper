@@ -49,7 +49,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # install a Python package first to be even able to run setup.py of another package. Or you have
         # a dependency which is not on PyPi.
         'installation': [{
-            'type': metadata_module.PrimitiveInstallationType.PIP,
+            'type': metadata_basePrimitiveInstallationType.PIP,
             'package_uri': 'git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#egg=CROCd3mWrapper'.format(
                 git_commit="60bf5890a893df0363854c52b02092af13af4373",
             ),
@@ -59,9 +59,9 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
         # best describe the primitive, make a merge request.
         'algorithm_types': [
-            metadata_module.PrimitiveAlgorithmType.MULTILABEL_CLASSIFICATION,
+            metadata_base.PrimitiveAlgorithmType.MULTILABEL_CLASSIFICATION,
         ],
-        'primitive_family': metadata_module.PrimitiveFamily.DIGITAL_IMAGE_PROCESSING,
+        'primitive_family': metadata_base.PrimitiveFamily.DIGITAL_IMAGE_PROCESSING,
     })
 
     def __init__(self, *, hyperparams: Hyperparams)-> None:
