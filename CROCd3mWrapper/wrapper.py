@@ -65,7 +65,19 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     })
 
     def __init__(self, *, hyperparams: Hyperparams)-> None:
-        super().__init__(hyperparams=Hyperparams)
+        super().__init__(hyperparams=hyperparams)
+
+    def fit(self) -> None:
+        pass
+
+    def get_params(self) -> Params:
+        return self._params
+
+    def set_params(self, *, params: Params) -> None:
+        self.params = params
+
+    def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
+        pass
 
     def produce(self, *, inputs: Inputs) -> CallResult[Outputs]:
         """
@@ -88,18 +100,6 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         image_analyzer = Croc()
 
         return image_analyzer.predict(inputs=image_path)
-
-    def fit(self) -> None:
-        pass
-
-    def get_params(self) -> Params:
-        return self._params
-
-    def set_params(self, *, params: Params) -> None:
-        self.params = params
-
-    def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
-        pass
 
 
 if __name__ == '__main__':
