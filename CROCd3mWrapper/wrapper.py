@@ -1,3 +1,4 @@
+import os
 import typing
 import numpy as np
 import pandas as pd
@@ -65,7 +66,8 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
               },
               {
                   "type": "PIP",
-                  "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@4cc350e186db788926c7630373072654cb0aa474#egg=CROCd3mWrapper"
+                  "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#egg=CROCd3mWrapper".format(
+                    git_commit=utils.current_git_commit(os.path.dirname(__file__)))
               }
         ],
         # The same path the primitive is registered with entry points in setup.py.
