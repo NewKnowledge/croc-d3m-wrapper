@@ -62,11 +62,11 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
               },
               {
                   "type": "PIP",
-                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git"
+                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@72c40cde6a6495054e06b4b4b4f561e2b55c1dfd#egg=nk_croc"
               },
               {
                   "type": "PIP",
-                  "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}'.format(
+                  "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#croc-d3m-wrapper".format(
                         git_commit=utils.current_git_commit(os.path.dirname(__file__)),
                         ),
               }
