@@ -16,6 +16,7 @@ __version__ = '1.0.0'
 Inputs = container.List[str]
 Outputs = container.List[dict]
 
+print(utils.current_git_commit(os.path.dirname(__file__)))
 
 class Params(params.Params):
     pass
