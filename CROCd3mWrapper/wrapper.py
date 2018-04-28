@@ -67,7 +67,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
               {
                   "type": "PIP",
                   "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#egg=CROCd3mWrapper".format(
-                        git_commit=utils.current_git_commit(os.path.dirname(__file__))),
+                        git_commit=1b8a6064588355305bffb68673d4ce36cd12cd7a),
               }
         ],
         # The same path the primitive is registered with entry points in setup.py.
