@@ -115,7 +115,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
         image_analyzer = Croc()
 
-        return image_analyzer.predict(inputs=image_path)
+        return image_analyzer.predict(input_path=image_path)
 
 
 if __name__ == '__main__':
