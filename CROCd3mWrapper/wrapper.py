@@ -11,7 +11,7 @@ from d3m import container, utils
 from d3m.metadata import hyperparams, base as metadata_base, params
 
 __author__ = 'Distil'
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 
 Inputs = container.List[str]
 Outputs = container.List[dict]
