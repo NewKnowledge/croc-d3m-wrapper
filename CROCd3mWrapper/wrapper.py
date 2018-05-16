@@ -16,9 +16,6 @@ __version__ = '1.0.0'
 Inputs = container.List[str]
 Outputs = container.List[dict]
 
-print("git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#egg=CROCd3mWrapper".format(
-                        git_commit=utils.current_git_commit(os.path.dirname(__file__))
-                        ))
 
 class Params(params.Params):
     pass
