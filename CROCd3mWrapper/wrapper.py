@@ -16,6 +16,9 @@ __version__ = '1.0.0'
 Inputs = container.List[str]
 Outputs = container.List[dict]
 
+print("git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#egg=CROCd3mWrapper".format(
+                        git_commit=utils.current_git_commit(os.path.dirname(__file__))
+                        ))
 
 class Params(params.Params):
     pass
@@ -62,12 +65,13 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
               },
               {
                   "type": "PIP",
-                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@55f77b583a33ce0bf1cddbf56559d842af906c60#egg=nk_croc"
+                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@20a76418a802146d37a65a1e9db7dbd94115686d#egg=nk_croc"
               },
               {
                   "type": "PIP",
                   "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#egg=CROCd3mWrapper".format(
-                        git_commit=utils.current_git_commit(os.path.dirname(__file__))),
+                        git_commit=utils.current_git_commit(os.path.dirname(__file__))
+                        ),
               }
         ],
         # The same path the primitive is registered with entry points in setup.py.
