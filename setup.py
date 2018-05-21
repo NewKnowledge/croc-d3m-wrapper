@@ -2,7 +2,7 @@ from distutils.core import setup
 
 
 setup(name='CROCd3mWrapper',
-      version='1.1.0',
+      version='1.2.0',
       description='character recognition and object classification primitive.',
       packages=['CROCd3mWrapper'],
       keywords=['d3m_primitive'],

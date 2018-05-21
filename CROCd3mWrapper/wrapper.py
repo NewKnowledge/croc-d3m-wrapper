@@ -1,5 +1,6 @@
 import os
 import typing
+from json import loads
 import numpy as np
 import pandas as pd
 
@@ -11,10 +12,10 @@ from d3m import container, utils
 from d3m.metadata import hyperparams, base as metadata_base, params
 
 __author__ = 'Distil'
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
-Inputs = container.List[str]
-Outputs = container.List[dict]
+Inputs = container.pandas.DataFrame
+Outputs = container.pandas.DataFrame
 
 
 class Params(params.Params):
@@ -103,24 +104,38 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
         Parameters
         ----------
-        inputs : Image URI or local filepath
+        inputs : pandas dataframe where a column is a pd.Series of image paths/URLs
 
         Returns
         -------
-        output : A dict with objects, text and tokens, corresponding to the
-            detected objects, raw text and tokens predicted to bne in the 
-            supplied image.
+        output : A dataframe with objects, text and tokens, corresponding to the
+            detected objects, raw text and tokens predicted to be in the 
+            supplied images.
         """
 
-        image_path = inputs
-
+        imagepath_df = inputs
         image_analyzer = Croc()
 
-        return image_analyzer.predict(input_path=image_path)
+        result_df = pd.DataFrame()
+
+        for i in imagepath_df.iloc[:,1]:  # will need to change to hyperparam specified column
+            ith_result = loads(image_analyzer.predict(input_path=i))
+
+            result_df.append('object_id': ith_result['objects']['id'],
+                             'object_label': ith_result['objects']['id'],
+                             'object_conf': ith_result['objects']['confidence'],
+                             'object_trees': ith_result['object_trees'],
+                             'tokens': ith_result['tokens'],
+                             'text': ith_result['text'])
+
+        return result_df
 
 
 if __name__ == '__main__':
     client = croc(hyperparams={})
-    image_path = 'http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg'
-    result = client.produce(inputs=image_path)
-    print(result)
+    imagepath_df = pd.DataFrame(
+        pd.Series(
+            ['http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg',
+            'http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg']))
+    result = client.produce(inputs=imagepath_df)
+    print(result.head)
