@@ -121,7 +121,8 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         for i in imagepath_df.iloc[:, imagepath_column]:  # will need to change to hyperparam specified column
             ith_result = loads(image_analyzer.predict(input_path=i))
 
-            result_df = result_df.append({'object_id': ith_result['objects']['id'],
+            result_df = result_df.append({'image_path': i,
+                                          'object_id': ith_result['objects']['id'],
                                           'object_label': ith_result['objects']['id'],
                                           'object_conf': ith_result['objects']['confidence'],
                                           'object_trees': ith_result['object_trees'],
