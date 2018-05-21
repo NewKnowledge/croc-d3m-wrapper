@@ -115,10 +115,10 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
         imagepath_df = inputs
         image_analyzer = Croc()
-
+        imagepath_column = 0
         result_df = pd.DataFrame()
 
-        for i in imagepath_df.iloc[:,1]:  # will need to change to hyperparam specified column
+        for i in imagepath_df.iloc[:, imagepath_column]:  # will need to change to hyperparam specified column
             ith_result = loads(image_analyzer.predict(input_path=i))
 
             result_df.append({'object_id': ith_result['objects']['id'],
@@ -133,9 +133,6 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
 if __name__ == '__main__':
     client = croc(hyperparams={})
-    imagepath_df = pd.DataFrame(
-        pd.Series(
-            ['http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg',
-            'http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg']))
+    imagepath_df = pd.DataFrame(pd.Series(['http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg','http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg']))
     result = client.produce(inputs=imagepath_df)
     print(result.head)
