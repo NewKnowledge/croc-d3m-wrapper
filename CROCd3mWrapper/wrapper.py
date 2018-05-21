@@ -126,7 +126,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
                              'object_conf': ith_result['objects']['confidence'],
                              'object_trees': ith_result['object_trees'],
                              'tokens': ith_result['tokens'],
-                             'text': ith_result['text']})
+                             'text': ith_result['text']}, ignore_index=True)
 
         return result_df
 
