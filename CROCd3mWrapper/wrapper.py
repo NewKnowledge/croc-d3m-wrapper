@@ -123,7 +123,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
             result_df = result_df.append({'image_path': i,
                                           'object_id': ith_result['objects']['id'],
-                                          'object_label': ith_result['objects']['id'],
+                                          'object_label': ith_result['objects']['label'],
                                           'object_conf': ith_result['objects']['confidence'],
                                           'object_trees': ith_result['object_trees'],
                                           'tokens': ith_result['tokens'],
