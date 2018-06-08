@@ -63,7 +63,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
               },
               {
                   "type": "PIP",
-                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@9553881d81b99f973da75f9fc06adbd4dc9e4153#egg=nk_croc"
+                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@63f4698a87f446895d0f9d3fc696c0c4bfaaac41#egg=nk_croc"
               },
               {
                   "type": "PIP",
@@ -121,15 +121,21 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         for i in imagepath_df.iloc[:, imagepath_column]:  # will need to change to hyperparam specified column
             ith_result = loads(image_analyzer.predict(input_path=i))
 
-            result_df = result_df.append({'image_path': i,
-                                          'object_id': ith_result['objects']['id'],
+            result_df = result_df.append({'object_id': ith_result['objects']['id'],
                                           'object_label': ith_result['objects']['label'],
                                           'object_conf': ith_result['objects']['confidence'],
                                           'object_trees': ith_result['object_trees'],
                                           'tokens': ith_result['tokens'],
                                           'text': ith_result['text']}, ignore_index=True)
 
-        return result_df
+        imagepath_df['object_id'] = result_df['object_id']
+        imagepath_df['object_label'] = result_df['object_label']
+        imagepath_df['object_conf'] = result_df['object_conf']
+        imagepath_df['object_trees'] = result_df['object_trees']
+        imagepath_df['tokens'] = result_df['tokens']
+        imagepath_df['text'] = result_df['text']
+
+        return imagepath_df
 
 
 if __name__ == '__main__':
