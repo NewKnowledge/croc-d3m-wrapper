@@ -10,7 +10,7 @@ setup(name='CROCd3mWrapper',
                         'numpy >= 1.13.3',
                         'nk_croc >= 1.1.0'],
       dependency_links=[
-                       "git+https://github.com/NewKnowledge/nk_croc@187010ae72121cda8c56a676d6c6a09305f66027#egg=nk_croc-1.1.0"
+                       "git+https://github.com/NewKnowledge/nk_croc@96a2124d1e3a36d08ede706a6b33017baedf5b0f#egg=nk_croc-1.1.0"
                        ],
       entry_points={
         'd3m.primitives': [

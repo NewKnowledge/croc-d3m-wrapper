@@ -63,7 +63,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
               },
               {
                   "type": "PIP",
-                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@187010ae72121cda8c56a676d6c6a09305f66027#egg=nk_croc"
+                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@96a2124d1e3a36d08ede706a6b33017baedf5b0f#egg=nk_croc"
               },
               {
                   "type": "PIP",
