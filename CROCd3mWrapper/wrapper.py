@@ -12,7 +12,7 @@ from d3m import container, utils
 from d3m.metadata import hyperparams, base as metadata_base, params
 
 __author__ = 'Distil'
-__version__ = '1.2.1'
+__version__ = '1.2.2'
 
 Inputs = container.pandas.DataFrame
 Outputs = container.pandas.DataFrame
@@ -23,7 +23,23 @@ class Params(params.Params):
 
 
 class Hyperparams(hyperparams.Hyperparams):
-    pass
+    target_columns = hyperparams.Set(
+        elements=hyperparams.Hyperparameter[str](''),
+        default=(),
+        max_size=sys.maxsize,
+        min_size=0,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+        description='names of columns with image paths'
+    )
+
+    output_labels = hyperparams.Set(
+        elements=hyperparams.Hyperparameter[str](''),
+        default=(),
+        max_size=sys.maxsize,
+        min_size=0,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+        description='desired names for croc output columns'
+    )
 
 
 class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
@@ -113,28 +129,42 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             supplied images.
         """
 
+        target_columns = self.hyperparams['target_columns']
+        output_labels = self.hyperparams['output_labels']
+
         imagepath_df = inputs
         image_analyzer = Croc()
-        imagepath_column = 0
-        result_df = pd.DataFrame()
 
-        for i in imagepath_df.iloc[:, imagepath_column]:  # will need to change to hyperparam specified column
-            ith_result = loads(image_analyzer.predict(input_path=i))
+        for i, ith_column in enumerate(target_columns):
+            # initialize an empty dataframe
+            result_df = pd.DataFrame()
+            output_label = output_labels[i]
 
-            result_df = result_df.append({'object_id': ith_result['objects']['id'],
-                                          'object_label': ith_result['objects']['label'],
-                                          'object_conf': ith_result['objects']['confidence'],
-                                          'object_trees': ith_result['object_trees'],
-                                          'tokens': ith_result['tokens'],
-                                          'text': ith_result['text']}, ignore_index=True)
+            for image_path in imagepath_df.loc[:, ith_column]:
+                jth_result = loads(
+                    image_analyzer.predict(input_path=image_path))
 
-        imagepath_df = pd.concat([imagepath_df.reset_index(drop=True), result_df], axis=1)
+                result_df = result_df.append(
+                    {output_label + '_object_id': jth_result['objects']['id'],
+                     output_label + '_object_label': jth_result['objects']['label'],
+                     output_label + '_object_conf': jth_result['objects']['confidence'],
+                     output_label + '_object_trees': jth_result['object_trees'],
+                     output_label + '_tokens': jth_result['tokens'],
+                     output_label + '_text': jth_result['text']},
+                    ignore_index=True)
+
+            imagepath_df = pd.concat(
+                [imagepath_df.reset_index(drop=True), result_df], axis=1)
 
         return imagepath_df
 
 
 if __name__ == '__main__':
-    client = croc(hyperparams={})
-    imagepath_df = pd.DataFrame(pd.Series(['http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg','http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg']))
+    client = croc(hyperparams={'target_columns': ['test_column'],
+                               'output_labels': ['test_column_prefix']})
+    imagepath_df = pd.DataFrame(
+        pd.Series(['http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg',
+                   'http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg']))
+    imagepath_df.columns = ['test_column']
     result = client.produce(inputs=imagepath_df)
     print(result.head)
