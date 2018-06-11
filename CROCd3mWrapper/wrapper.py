@@ -128,12 +128,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
                                           'tokens': ith_result['tokens'],
                                           'text': ith_result['text']}, ignore_index=True)
 
-        imagepath_df['object_id'] = result_df['object_id']
-        imagepath_df['object_label'] = result_df['object_label']
-        imagepath_df['object_conf'] = result_df['object_conf']
-        imagepath_df['object_trees'] = result_df['object_trees']
-        imagepath_df['tokens'] = result_df['tokens']
-        imagepath_df['text'] = result_df['text']
+        imagepath_df = pd.concat([imagepath_df.reset_index(drop=True), result_df], axis=1)
 
         return imagepath_df
 
