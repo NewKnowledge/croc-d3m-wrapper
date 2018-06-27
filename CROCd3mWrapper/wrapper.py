@@ -50,7 +50,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         "version": __version__,
         "name": "croc",
         # Keywords do not have a controlled vocabulary. Authors can put here whatever they find suitable.
-        "keywords": ['OCR', 'object detection', 'image analysis'],
+        "keywords": ["OCR," "object detection", "image analysis"],
         "source": {
             "name": __author__,
             "uris": [
