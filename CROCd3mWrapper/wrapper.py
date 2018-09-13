@@ -157,7 +157,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             imagepath_df = pd.concat(
                 [imagepath_df.reset_index(drop=True), result_df], axis=1)
 
-        return imagepath_df
+        return CallResult(imagepath_df)
 
 
 if __name__ == '__main__':
