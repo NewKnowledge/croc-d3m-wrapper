@@ -117,11 +117,15 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     def _get_column_base_path(self, inputs: Inputs, column_name: str) -> str:
         # fetches the base path associated with a column given a name if it exists
         column_metadata = inputs.metadata.query((metadata_base.ALL_ELEMENTS,))
+        if not column_metadata or len(column_metadata) == 0:
+            return None
+
         num_cols = column_metadata['dimension']['length']
         for i in range(0, num_cols):
             col_data = inputs.metadata.query((metadata_base.ALL_ELEMENTS, i))
             if col_data['name'] == column_name and 'location_base_uris' in col_data:
                 return col_data['location_base_uris'][0]
+
         return None
 
     def produce(self, *, inputs: Inputs) -> CallResult[Outputs]:
