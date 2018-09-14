@@ -80,7 +80,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
               },
               {
                   "type": "PIP",
-                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@155be671f66978084055915ed582efbd38a66651#egg=nk_croc"
+                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@b2dad8fcfbeb40e6f07e2cf4cec36c385fb45e73#egg=nk_croc"
               },
               {
                   "type": "PIP",
@@ -114,6 +114,20 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
         pass
 
+    def _get_column_base_path(self, inputs: Inputs, column_name: str) -> str:
+        # fetches the base path associated with a column given a name if it exists
+        column_metadata = inputs.metadata.query((metadata_base.ALL_ELEMENTS,))
+        if not column_metadata or len(column_metadata) == 0:
+            return None
+
+        num_cols = column_metadata['dimension']['length']
+        for i in range(0, num_cols):
+            col_data = inputs.metadata.query((metadata_base.ALL_ELEMENTS, i))
+            if col_data['name'] == column_name and 'location_base_uris' in col_data:
+                return col_data['location_base_uris'][0]
+
+        return None
+
     def produce(self, *, inputs: Inputs) -> CallResult[Outputs]:
         """
             Produce image object classification predictions and OCR for an
@@ -126,7 +140,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         Returns
         -------
         output : A dataframe with objects, text and tokens, corresponding to the
-            detected objects, raw text and tokens predicted to be in the 
+            detected objects, raw text and tokens predicted to be in the
             supplied images.
         """
 
@@ -141,9 +155,23 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             result_df = pd.DataFrame()
             output_label = output_labels[i]
 
+            # get the base uri from the column metadata and remove the the
+            # scheme portion
+            base_path = self._get_column_base_path(inputs, ith_column)
+            if base_path:
+                base_path = base_path.split('://')[1]
+
             for image_path in imagepath_df.loc[:, ith_column]:
+
+                # append the image path to the base path if it exists, otherwise just
+                # use the image path as found in the column
+                if base_path:
+                    input_path = os.path.join(base_path, image_path)
+                else:
+                    input_path = image_path
+
                 jth_result = loads(
-                    image_analyzer.predict(input_path=image_path))
+                    image_analyzer.predict(input_path=input_path))
 
                 result_df = result_df.append(
                     {output_label + '_object_id': jth_result['objects']['id'],
