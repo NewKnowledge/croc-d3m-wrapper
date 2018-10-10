@@ -80,10 +80,6 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
               },
               {
                   "type": "PIP",
-                  "package_uri": "git+https://github.com/NewKnowledge/nk_croc.git@b2dad8fcfbeb40e6f07e2cf4cec36c385fb45e73#egg=nk_croc"
-              },
-              {
-                  "type": "PIP",
                   "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#egg=CROCd3mWrapper".format(
                         git_commit=utils.current_git_commit(os.path.dirname(__file__))
                         ),
