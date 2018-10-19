@@ -4,6 +4,7 @@ import typing
 from json import loads
 import numpy as np
 import pandas as pd
+from keras import backend as K
 
 from nk_croc import *
 
@@ -180,6 +181,9 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
             imagepath_df = pd.concat(
                 [imagepath_df.reset_index(drop=True), result_df], axis=1)
+
+        # clear the session to avoid tensorflow state errors when invoking downstream primitives
+        K.clear_session()
 
         return CallResult(imagepath_df)
 
