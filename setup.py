@@ -10,10 +10,10 @@ setup(
     install_requires=[
         'pandas >= 0.22.0, < 0.23.0',
         'numpy >= 1.13.3',
-        'nk_croc >= 1.1.1'
+        'nk_croc >= 1.1.0'
     ],
     dependency_links=[
-        "git+https://github.com/NewKnowledge/nk_croc@b2dad8fcfbeb40e6f07e2cf4cec36c385fb45e73#egg=nk_croc-1.1.1"
+        "git+https://github.com/NewKnowledge/d3m_croc@14dd7ad3179d9bfb4aa38639c748999a1d0db5a6#egg=nk_croc-1.1.0"
     ],
     entry_points={
         'd3m.primitives': [
