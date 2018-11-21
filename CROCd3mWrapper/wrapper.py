@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from keras import backend as K
 
-from nk_croc import *
+from d3m_croc import *
 
 from d3m.primitive_interfaces.base import PrimitiveBase, CallResult
 
