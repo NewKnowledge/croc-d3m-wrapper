@@ -1,12 +1,10 @@
-NEEDS UPDATING
-
 # Character Recognition and Object Classification (CROC) D3M Wrapper
 
 CROC takes a local image or URL and performs object classification and optical character recognition. It produces a set of *N* object classification predictions with a pre-trained Keras model (default: imagenet) and performs character recognition with the `tesseract` library. All code is written in Python 3.5 and must be run in 3.5 or greater.
 
 ## Install
 
-pip3 install git+https://github.com/NewKnowledge/croc-d3m-wrapper
+pip3 install -e git+https://github.com/NewKnowledge/croc-d3m-wrapper.git#egg=CROCd3mWrapper --process-dependency-links
 
 ## Input
 
