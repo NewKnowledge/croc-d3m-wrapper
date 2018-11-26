@@ -84,7 +84,13 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
                   "package_uri": "git+https://github.com/NewKnowledge/croc-d3m-wrapper.git@{git_commit}#egg=CROCd3mWrapper".format(
                         git_commit=utils.current_git_commit(os.path.dirname(__file__))
                         ),
-              }
+              },
+                        {
+            "type": "TGZ",
+            "key": "croc_weights",
+            "file_uri": "http://public.datadrivendiscovery.org/croc.tar.gz",
+            "file_digest":"0be3e8ab1568ec8225b173112f4270d665fb9ea253093cd9ea98c412c9053c92"
+        },
         ],
         # The same path the primitive is registered with entry points in setup.py.
         "python_path": "d3m.primitives.distil.croc",
@@ -96,8 +102,10 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         "primitive_family": metadata_base.PrimitiveFamily.DIGITAL_IMAGE_PROCESSING
     })
 
-    def __init__(self, *, hyperparams: Hyperparams)-> None:
-        super().__init__(hyperparams=hyperparams)
+    def __init__(self, *, hyperparams: Hyperparams, volumes: typing.Dict[str,str]=None)-> None:
+        super().__init__(hyperparams=hyperparams, volumes=volumes)
+        
+        self.volumes = volumes
 
     def fit(self) -> None:
         pass
@@ -145,7 +153,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         output_labels = self.hyperparams['output_labels']
 
         imagepath_df = inputs
-        image_analyzer = Croc()
+        image_analyzer = Croc(self.volumes["croc_weights"]+"/inception_v3_weights_tf_dim_ordering_tf_kernels.h5/")
 
         for i, ith_column in enumerate(target_columns):
             # initialize an empty dataframe
@@ -189,9 +197,11 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
 
 if __name__ == '__main__':
+    volumes = {} # d3m large primitive architecture dictionary of large files
+    volumes["croc_weights"]='/home/croc.tar.gz' # location of extracted required files archive
     client = croc(hyperparams={'target_columns': ['test_column'],
-                               'output_labels': ['test_column_prefix']})
-    imagepath_df = pd.DataFrame(
+                               'output_labels': ['test_column_prefix']}, volumes=volumes)
+    imagepath_df = container.pandas.DataFrame(
         pd.Series(['http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg',
                    'http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg']))
     imagepath_df.columns = ['test_column']
