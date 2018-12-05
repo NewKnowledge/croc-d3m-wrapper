@@ -104,7 +104,7 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
     def __init__(self, *, hyperparams: Hyperparams, volumes: typing.Dict[str,str]=None)-> None:
         super().__init__(hyperparams=hyperparams, volumes=volumes)
-        
+
         self.volumes = volumes
 
     def fit(self) -> None:
@@ -153,10 +153,10 @@ class croc(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         output_labels = self.hyperparams['output_labels']
 
         imagepath_df = inputs
-        image_analyzer = Croc(weights_path=self.volumes["croc_weights"]+"/inception_v3_weights_tf_dim_ordering_tf_kernels.h5/",
-                             isa_path=self.volumes["croc_weights"]+"/is_a.py/",
-                             id_mapping_path=self.volumes["croc_weights"]+"/id_mapping.py/",
-                             spacy_path=self.volumes["croc_weights"]+"/en_core_web_md-1.2.1.tar.gz/")
+        image_analyzer = Croc(weights_path=self.volumes["croc_weights"]+"/inception_v3_weights_tf_dim_ordering_tf_kernels.h5",
+                             isa_path=self.volumes["croc_weights"]+"/is_a.py",
+                             id_mapping_path=self.volumes["croc_weights"]+"/id_mapping.py",
+                             spacy_path=self.volumes["croc_weights"]+"/en_core_web_md-1.2.1.tar.gz")
 
         for i, ith_column in enumerate(target_columns):
             # initialize an empty dataframe
