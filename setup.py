@@ -14,7 +14,7 @@ setup(
     ],
     dependency_links=[
         "git+https://github.com/NewKnowledge/d3m_croc@42db02087155f5e34cb718a7d2475ea1388f31d0#egg=d3m_croc-1.1.1"
-    ], # pointing to the latest commit on nd/d3m_croc branch
+    ], 
     entry_points={
         'd3m.primitives': [
             'distil.croc = CROCd3mWrapper:croc'
