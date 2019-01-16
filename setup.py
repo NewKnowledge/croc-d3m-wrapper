@@ -8,12 +8,12 @@ setup(
     packages=['CROCd3mWrapper'],
     keywords=['d3m_primitive'],
     install_requires=[
-        'pandas >= 0.22.0, < 0.23.0',
+        'pandas == 0.23.4',
         'numpy >= 1.13.3',
         'd3m_croc >= 1.1.1'
     ],
     dependency_links=[
-        "git+https://github.com/NewKnowledge/d3m_croc@42db02087155f5e34cb718a7d2475ea1388f31d0#egg=d3m_croc-1.1.1"
+        "git+https://github.com/NewKnowledge/d3m_croc@979d12b0d42e69eb263c6635c9be659d96d9940e#egg=d3m_croc-1.1.1"
     ], 
     entry_points={
         'd3m.primitives': [
