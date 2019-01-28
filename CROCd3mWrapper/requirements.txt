@@ -1,5 +1,5 @@
 en-core-web-sm==2.0.0
-Keras==2.1.6
+Keras>= 2.1.6, <= 2.2.4
 numpy==1.15.5
 pandas==0.23.4
 Pillow==5.1.0
@@ -7,4 +7,4 @@ scikit-learn==0.20.2
 scipy==1.0.1
 spacy==2.0.11
 tensorflow==1.8.0
-tesserocr==2.3.1
+tesserocr>= 1.8.0, <= 1.12.0
