@@ -9,7 +9,7 @@ setup(
     keywords=['d3m_primitive'],
     install_requires=[
         'pandas == 0.23.4',
-        'numpy >= 1.13.3',
+        'numpy >= 1.15.4',
         'd3m_croc >= 1.1.1'
     ],
     dependency_links=[
