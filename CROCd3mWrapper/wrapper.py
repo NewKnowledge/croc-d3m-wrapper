@@ -43,6 +43,18 @@ class Hyperparams(hyperparams.Hyperparams):
 
 
 class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
+    """
+            Produce image object classification predictions and OCR for an
+            image provided as an URI or filepath
+        Parameters
+        ----------
+        inputs : pandas dataframe where a column is a pd.Series of image paths/URLs
+        Returns
+        -------
+        output : A dataframe with objects, text and tokens, corresponding to the
+            detected objects, raw text and tokens predicted to be in the
+            supplied images.
+        """
     metadata = metadata_base.PrimitiveMetadata({
         # Simply an UUID generated once and fixed forever. Generated using "uuid.uuid4()".
         "id": "404fae2a-2f0a-4c9b-9ad2-fb1528990561",
