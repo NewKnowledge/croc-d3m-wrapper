@@ -17,6 +17,7 @@ from d3m.container import DataFrame as d3m_DataFrame
 
 __author__ = 'Distil'
 __version__ = '1.2.3'
+__contact__ = 'mailto:numa@newknowledge.io'
 
 Inputs = container.pandas.DataFrame
 Outputs = container.pandas.DataFrame
@@ -90,7 +91,7 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
         },
         ],
         # The same path the primitive is registered with entry points in setup.py.
-        "python_path": "d3m.primitives.distil.croc",
+        "python_path": "d3m.primitives.digital_image_processing.croc.croc",
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
         # best describe the primitive, make a merge request.
         "algorithm_types": [
