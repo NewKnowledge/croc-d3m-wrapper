@@ -17,7 +17,7 @@ setup(
     ], 
     entry_points={
         'd3m.primitives': [
-            'distil.croc = CROCd3mWrapper:croc'
+            'digital_image_processing.croc.croc = CROCd3mWrapper:croc'
         ],
     }
 )
