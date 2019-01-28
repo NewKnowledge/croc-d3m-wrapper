@@ -52,6 +52,7 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
         "keywords": ["OCR," "object detection", "image analysis"],
         "source": {
             "name": __author__,
+            'contact': __contact__,
             "uris": [
                 # Unstructured URIs.
                 "https://github.com/NewKnowledge/croc-d3m-wrapper",
