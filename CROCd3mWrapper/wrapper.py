@@ -42,7 +42,7 @@ class Hyperparams(hyperparams.Hyperparams):
     )
 
 
-class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
+class Croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
     metadata = metadata_base.PrimitiveMetadata({
         # Simply an UUID generated once and fixed forever. Generated using "uuid.uuid4()".
         "id": "404fae2a-2f0a-4c9b-9ad2-fb1528990561",
@@ -91,7 +91,7 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
         },
         ],
         # The same path the primitive is registered with entry points in setup.py.
-        "python_path": "d3m.primitives.digital_image_processing.croc.croc",
+        "python_path": "d3m.primitives.digital_image_processing.croc.Croc",
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
         # best describe the primitive, make a merge request.
         "algorithm_types": [
@@ -245,7 +245,7 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
 if __name__ == '__main__':
     volumes = {} # d3m large primitive architecture dictionary of large files
     volumes["croc_weights"]='/home/croc.tar.gz' # location of extracted required files archive
-    client = croc(hyperparams={'target_columns': ['test_column'],
+    client = Croc(hyperparams={'target_columns': ['test_column'],
                                'output_labels': ['test_column_prefix']}, volumes=volumes)
     imagepath_df = container.pandas.DataFrame(
         pd.Series(['http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg',
