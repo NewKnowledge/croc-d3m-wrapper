@@ -14,6 +14,7 @@ from d3m.primitive_interfaces.base import CallResult
 from d3m import container, utils
 from d3m.metadata import hyperparams, base as metadata_base
 from d3m.container import DataFrame as d3m_DataFrame
+from common_primitives import utils as utils_cp, dataset_to_dataframe as DatasetToDataFrame
 
 __author__ = 'Distil'
 __version__ = '1.2.3'
@@ -192,77 +193,60 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
             imagepath_df = pd.concat(
                 [imagepath_df.reset_index(drop=True), result_df], axis=1)
 
+            imagepath_df.index.name = 'd3mIndex'
+
         # clear the session to avoid tensorflow state errors when invoking downstream primitives
         K.clear_session()
         
         # create metadata for the croc output dataframe
         croc_df = d3m_DataFrame(imagepath_df)
-        # first column (d3mIndex)
+        # first column (_object_conf)
         col_dict = dict(croc_df.metadata.query((metadata_base.ALL_ELEMENTS, 0)))
-        col_dict['structural_type'] = type("1")
-        col_dict['name'] = 'd3mIndex'
-        col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/Attribute')
+        col_dict['structural_type'] = type("it is a string")
+        col_dict['name'] = output_label + "_object_conf"
+        col_dict['semantic_types'] = ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute')
         croc_df.metadata = croc_df.metadata.update((metadata_base.ALL_ELEMENTS, 0), col_dict)
-        # second column (filename)
+        # second column (_object_id)
         col_dict = dict(croc_df.metadata.query((metadata_base.ALL_ELEMENTS, 1)))
         col_dict['structural_type'] = type("it is a string")
-        col_dict['name'] = "filename"
+        col_dict['name'] = output_label + "_object_id"
         col_dict['semantic_types'] = ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute')
         croc_df.metadata = croc_df.metadata.update((metadata_base.ALL_ELEMENTS, 1), col_dict)
-        # third column (bounding_box)
+        # third column (_object_label)
         col_dict = dict(croc_df.metadata.query((metadata_base.ALL_ELEMENTS, 2)))
         col_dict['structural_type'] = type("it is a string")
-        col_dict['name'] = "bounding_box"
+        col_dict['name'] = output_label + "_object_label"
         col_dict['semantic_types'] = ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute')
         croc_df.metadata = croc_df.metadata.update((metadata_base.ALL_ELEMENTS, 2), col_dict)
-        # fourth column (objects_object_conf)
+        # fourth column (_object_trees)
         col_dict = dict(croc_df.metadata.query((metadata_base.ALL_ELEMENTS, 3)))
         col_dict['structural_type'] = type("it is a string")
-        col_dict['name'] = "objects_object_conf"
+        col_dict['name'] = output_label + "_object_trees"
         col_dict['semantic_types'] = ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute')
         croc_df.metadata = croc_df.metadata.update((metadata_base.ALL_ELEMENTS, 3), col_dict)
-        # fifth column (objects_object_id)
+        # five column (_text)
         col_dict = dict(croc_df.metadata.query((metadata_base.ALL_ELEMENTS, 4)))
         col_dict['structural_type'] = type("it is a string")
-        col_dict['name'] = "objects_object_id"
+        col_dict['name'] = output_label + "_text"
         col_dict['semantic_types'] = ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute')
         croc_df.metadata = croc_df.metadata.update((metadata_base.ALL_ELEMENTS, 4), col_dict)
-        # sixth column (objects_object_label)
+        # sixth column (_tokens)
         col_dict = dict(croc_df.metadata.query((metadata_base.ALL_ELEMENTS, 5)))
         col_dict['structural_type'] = type("it is a string")
-        col_dict['name'] = "objects_object_label"
+        col_dict['name'] = output_label + "_tokens"
         col_dict['semantic_types'] = ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute')
         croc_df.metadata = croc_df.metadata.update((metadata_base.ALL_ELEMENTS, 5), col_dict)
-        # seventh column (objects_object_trees)
-        col_dict = dict(croc_df.metadata.query((metadata_base.ALL_ELEMENTS, 6)))
-        col_dict['structural_type'] = type("it is a string")
-        col_dict['name'] = "objects_object_trees"
-        col_dict['semantic_types'] = ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute')
-        croc_df.metadata = croc_df.metadata.update((metadata_base.ALL_ELEMENTS, 6), col_dict)
-        # eighth column (objects_text)
-        col_dict = dict(croc_df.metadata.query((metadata_base.ALL_ELEMENTS, 7)))
-        col_dict['structural_type'] = type("it is a string")
-        col_dict['name'] = "objects_text"
-        col_dict['semantic_types'] = ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute')
-        croc_df.metadata = croc_df.metadata.update((metadata_base.ALL_ELEMENTS, 7), col_dict)
-        # ninth column (objects_tokens)
-        col_dict = dict(croc_df.metadata.query((metadata_base.ALL_ELEMENTS, 8)))
-        col_dict['structural_type'] = type("it is a string")
-        col_dict['name'] = "objects_tokens"
-        col_dict['semantic_types'] = ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute')
-        croc_df.metadata = croc_df.metadata.update((metadata_base.ALL_ELEMENTS, 8), col_dict)
 
         return CallResult(croc_df)
 
 
 if __name__ == '__main__':
     volumes = {} # d3m large primitive architecture dictionary of large files
-    volumes["croc_weights"]='/home/croc.tar.gz' # location of extracted required files archive
-    client = croc(hyperparams={'target_columns': ['test_column'],
-                               'output_labels': ['test_column_prefix']}, volumes=volumes)
-    imagepath_df = container.pandas.DataFrame(
-        pd.Series(['http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg',
-                   'http://i0.kym-cdn.com/photos/images/facebook/001/253/011/0b1.jpg']))
-    imagepath_df.columns = ['test_column']
-    result = client.produce(inputs=imagepath_df)
-    print(result.head)
+    volumes["croc_weights"]='/home/croc_weights' # location of extracted required files archive
+    client = croc(hyperparams={'target_columns': ['filename'],
+                               'output_labels': ['_object_label']}, volumes=volumes)
+    input_dataset = container.Dataset.load("file:///home/datasets/seed_datasets_current/LL1_penn_fudan_pedestrian/TRAIN/dataset_TRAIN/datasetDoc.json")
+    ds2df_client = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams = {"dataframe_resource":"0"})
+    df = d3m_DataFrame(ds2df_client.produce(inputs = input_dataset).value) 
+    result = client.produce(inputs=df)
+    print(result.value)
