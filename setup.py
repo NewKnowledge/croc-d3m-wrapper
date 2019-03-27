@@ -13,7 +13,7 @@ setup(
         'd3m_croc >= 1.1.1'
     ],
     dependency_links=[
-        "git+https://github.com/NewKnowledge/d3m_croc@374d84659a6709446595fec5bb121a7d84ed0954#egg=d3m_croc-1.1.1"
+        "git+https://github.com/NewKnowledge/d3m_croc@32fbd001000574eac18aab7d4544dd72c8224948#egg=d3m_croc-1.1.1"
     ], 
     entry_points={
         'd3m.primitives': [
