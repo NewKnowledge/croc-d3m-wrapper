@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name='CROCd3mWrapper',
-    version='1.2.3',
+    version='1.2.4',
     description='character recognition and object classification primitive.',
     packages=['CROCd3mWrapper'],
     keywords=['d3m_primitive'],
@@ -13,7 +13,7 @@ setup(
         'd3m_croc >= 1.1.1'
     ],
     dependency_links=[
-        "git+https://github.com/NewKnowledge/d3m_croc@a32104714df2c8e445895c10182c6f77c7b695e5#egg=d3m_croc-1.1.1"
+        "git+https://github.com/NewKnowledge/d3m_croc@374d84659a6709446595fec5bb121a7d84ed0954#egg=d3m_croc-1.1.1"
     ], 
     entry_points={
         'd3m.primitives': [
