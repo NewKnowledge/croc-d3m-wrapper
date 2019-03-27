@@ -17,7 +17,7 @@ from d3m.container import DataFrame as d3m_DataFrame
 from common_primitives import utils as utils_cp, dataset_to_dataframe as DatasetToDataFrame
 
 __author__ = 'Distil'
-__version__ = '1.2.3'
+__version__ = '1.2.4'
 __contact__ = 'mailto:numa@newknowledge.io'
 
 Inputs = container.pandas.DataFrame
