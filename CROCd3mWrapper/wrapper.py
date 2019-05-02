@@ -245,7 +245,7 @@ if __name__ == '__main__':
     volumes["croc_weights"]='/home/croc_weights' # location of extracted required files archive
     client = croc(hyperparams={'target_columns': ['filename'],
                                'output_labels': ['filename']}, volumes=volumes)
-    input_dataset = container.Dataset.load("file:///home/datasets/seed_datasets_current/LL1_penn_fudan_pedestrian/TRAIN/dataset_TRAIN/datasetDoc.json")
+    input_dataset = container.Dataset.load("file:///home/datasets/seed_datasets_current/uu_101_object_categories/TRAIN/dataset_TRAIN/datasetDoc.json")
     ds2df_client = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams = {"dataframe_resource":"0"})
     df = d3m_DataFrame(ds2df_client.produce(inputs = input_dataset).value) 
     result = client.produce(inputs=df)
