@@ -4,6 +4,9 @@ import typing
 from json import loads
 import numpy as np
 import pandas as pd
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_colwidth', -1)
 from keras import backend as K
 
 from d3m_croc import *
@@ -152,8 +155,9 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
         target_columns = self.hyperparams['target_columns']
         output_labels = self.hyperparams['output_labels']
 
+        # imagepath_df = inputs
         ds2df_client_zero = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams = {"dataframe_resource":"0"})
-        imagepath_df  = d3m_DataFrame(ds2df_client_zero.produce(inputs = inputs).value)
+        imagepath_df = d3m_DataFrame(ds2df_client_zero.produce(inputs = inputs).value)
         image_analyzer = Croc(weights_path=self.volumes["croc_weights"]+"/inception_v3_weights_tf_dim_ordering_tf_kernels.h5",
                              isa_path=self.volumes["croc_weights"]+"/is_a.py",
                              id_mapping_path=self.volumes["croc_weights"]+"/id_mapping.py",
@@ -191,19 +195,16 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
                      output_label + '_text': jth_result['text']},
                     ignore_index=True)
 
-            imagepath_df = pd.concat(
-                [imagepath_df.reset_index(drop=True), result_df], axis=1)
-            imagepath_df = imagepath_df.rename(columns={imagepath_df.columns[-1]: 'label'})
-            imagepath_df = imagepath_df.iloc[:, -1]
+            imagepath_df = pd.concat([imagepath_df.reset_index(drop=True), result_df], axis=1)
 
         # clear the session to avoid tensorflow state errors when invoking downstream primitives
         K.clear_session()
-        
+
         ds2df_client_learning = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams = {"dataframe_resource":"learningData"})
         learningdata = d3m_DataFrame(ds2df_client_learning.produce(inputs = inputs).value)
         learningdata = learningdata.iloc[:, 0:2]
-        imagepath_df = pd.concat(
-                [learningdata, imagepath_df.reset_index(drop=True)], axis=1)
+        imagepath_df = learningdata.merge(imagepath_df, on='filename', how='inner')
+        imagepath_df = imagepath_df.iloc[:3]
         
         # create metadata for the croc output dataframe
         croc_df = d3m_DataFrame(imagepath_df)
@@ -251,7 +252,7 @@ if __name__ == '__main__':
     volumes = {} # d3m large primitive architecture dictionary of large files
     volumes["croc_weights"]='/home/croc_weights' # location of extracted required files archive
     client = croc(hyperparams={'target_columns': ['filename'],
-                               'output_labels': ['filename']}, volumes=volumes)
-    input_dataset = container.Dataset.load("file:///home/datasets/seed_datasets_current/uu_101_object_categories/TRAIN/dataset_TRAIN/datasetDoc.json") 
+                               'output_labels': ['label']}, volumes=volumes)
+    input_dataset = container.Dataset.load("file:///home/datasets/seed_datasets_current/uu_101_object_categories/TEST/dataset_TEST/datasetDoc.json") 
     result = client.produce(inputs= input_dataset)
     print(result.value)
