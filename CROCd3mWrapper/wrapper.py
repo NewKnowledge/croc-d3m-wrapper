@@ -18,10 +18,10 @@ from common_primitives import utils as utils_cp, dataset_to_dataframe as Dataset
 
 __author__ = 'Distil'
 __version__ = '1.2.4'
-__contact__ = 'mailto:numa@newknowledge.io'
+__contact__ = 'mailto:nklabs@newknowledge.io'
 
-Inputs = container.pandas.DataFrame
-Outputs = container.pandas.DataFrame
+Inputs = container.dataset.Dataset
+Outputs = container.dataset.Dataset
 
 class Hyperparams(hyperparams.Hyperparams):
     target_columns = hyperparams.Set(
@@ -152,7 +152,8 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
         target_columns = self.hyperparams['target_columns']
         output_labels = self.hyperparams['output_labels']
 
-        imagepath_df = inputs
+        ds2df_client_zero = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams = {"dataframe_resource":"0"})
+        imagepath_df  = d3m_DataFrame(ds2df_client_zero.produce(inputs = inputs).value)
         image_analyzer = Croc(weights_path=self.volumes["croc_weights"]+"/inception_v3_weights_tf_dim_ordering_tf_kernels.h5",
                              isa_path=self.volumes["croc_weights"]+"/is_a.py",
                              id_mapping_path=self.volumes["croc_weights"]+"/id_mapping.py",
@@ -165,7 +166,7 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
 
             # get the base uri from the column metadata and remove the the
             # scheme portion
-            base_path = self._get_column_base_path(inputs, ith_column)
+            base_path = self._get_column_base_path(imagepath_df, ith_column)
             if base_path:
                 base_path = base_path.split('://')[1]
 
@@ -192,11 +193,17 @@ class croc(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
 
             imagepath_df = pd.concat(
                 [imagepath_df.reset_index(drop=True), result_df], axis=1)
-
-            imagepath_df.index.name = 'd3mIndex'
+            imagepath_df = imagepath_df.rename(columns={imagepath_df.columns[-1]: 'label'})
+            imagepath_df = imagepath_df.iloc[:, -1]
 
         # clear the session to avoid tensorflow state errors when invoking downstream primitives
         K.clear_session()
+        
+        ds2df_client_learning = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams = {"dataframe_resource":"learningData"})
+        learningdata = d3m_DataFrame(ds2df_client_learning.produce(inputs = inputs).value)
+        learningdata = learningdata.iloc[:, 0:2]
+        imagepath_df = pd.concat(
+                [learningdata, imagepath_df.reset_index(drop=True)], axis=1)
         
         # create metadata for the croc output dataframe
         croc_df = d3m_DataFrame(imagepath_df)
@@ -245,8 +252,6 @@ if __name__ == '__main__':
     volumes["croc_weights"]='/home/croc_weights' # location of extracted required files archive
     client = croc(hyperparams={'target_columns': ['filename'],
                                'output_labels': ['filename']}, volumes=volumes)
-    input_dataset = container.Dataset.load("file:///home/datasets/seed_datasets_current/uu_101_object_categories/TRAIN/dataset_TRAIN/datasetDoc.json")
-    ds2df_client = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams = {"dataframe_resource":"0"})
-    df = d3m_DataFrame(ds2df_client.produce(inputs = input_dataset).value) 
-    result = client.produce(inputs=df)
+    input_dataset = container.Dataset.load("file:///home/datasets/seed_datasets_current/uu_101_object_categories/TRAIN/dataset_TRAIN/datasetDoc.json") 
+    result = client.produce(inputs= input_dataset)
     print(result.value)
